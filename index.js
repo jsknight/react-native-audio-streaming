@@ -65,7 +65,7 @@ class Player extends Component {
                 break;
             case STOPPED:
             case ERROR:
-                ReactNativeAudioStreaming.play(this.props.url, {showIniOSMediaCenter: true, showInAndroidNotifications: true});
+                ReactNativeAudioStreaming.play(this.props.track.url, {showIniOSMediaCenter: true, showInAndroidNotifications: true});
                 break;
             case BUFFERING:
                 ReactNativeAudioStreaming.stop();
@@ -100,7 +100,7 @@ class Player extends Component {
             <TouchableOpacity style={styles.container} onPress={this._onPress}>
                 {icon}
                 <View style={styles.textContainer}>
-                    <Text style={styles.songName}>{this.state.song}</Text>
+                    <Text style={styles.songName}>{this.props.track.title}</Text>
                 </View>
             </TouchableOpacity>
         );
