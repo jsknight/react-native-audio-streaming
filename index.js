@@ -33,7 +33,6 @@ class Player extends Component {
         this._onPress = this._onPress.bind(this);
         this.state = {
             status: STOPPED,
-            song: ''
         };
     }
 
@@ -41,9 +40,8 @@ class Player extends Component {
         this.subscription = DeviceEventEmitter.addListener(
             'AudioBridgeEvent', (evt) => {
                 // We just want meta update for song name
-                if (evt.status === METADATA_UPDATED && evt.key === 'StreamTitle') {
-                    this.setState({song: evt.value});
-                } else if (evt.status != METADATA_UPDATED) {
+                console.log("EVENT", evt);
+                if (evt.status != METADATA_UPDATED) {
                     this.setState(evt);
                 }
             }
@@ -55,6 +53,7 @@ class Player extends Component {
     }
 
     _onPress() {
+        console.log("ON PRESS", this.state);
         switch (this.state.status) {
             case PLAYING:
             case STREAMING:
@@ -65,7 +64,7 @@ class Player extends Component {
                 break;
             case STOPPED:
             case ERROR:
-                ReactNativeAudioStreaming.play(this.props.track.url, {showIniOSMediaCenter: true, showInAndroidNotifications: true});
+                ReactNativeAudioStreaming.play(this.props.url, {showIniOSMediaCenter: true, showInAndroidNotifications: true});
                 break;
             case BUFFERING:
                 ReactNativeAudioStreaming.stop();
@@ -100,7 +99,7 @@ class Player extends Component {
             <TouchableOpacity style={styles.container} onPress={this._onPress}>
                 {icon}
                 <View style={styles.textContainer}>
-                    <Text style={styles.songName}>{this.props.track.title}</Text>
+                    <Text style={styles.songName}>{this.props.title}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -150,7 +149,8 @@ const styles = StyleSheet.create({
 });
 
 Player.propTypes = {
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
 };
 
 export { Player, ReactNativeAudioStreaming }
